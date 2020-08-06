@@ -58,6 +58,8 @@ byte _cmd_setTime(void *a, void *p){
   alarms[i].enabled = true;
   alarms[i].duration = (byte)duration;
 
+  free(buffer);
+
   buffer = (char *)calloc(sizeof(char),5);
   strncpy(buffer, (char *)p, 5);
   char *hStr = strtok(buffer, ":");
@@ -69,8 +71,11 @@ byte _cmd_setTime(void *a, void *p){
   alarms[i].hour = (byte)h;
   alarms[i].min = (byte)m;
 
+  free(buffer);
+
   Serial.println("SET OK");
   storeAlarms();
+
 }
 
 byte _cmd_printAlarms(void *a, void *p){
@@ -87,7 +92,7 @@ byte _cmd_enableAlarm(void *a, void *p){
 
 byte _cmd_disableAlarm(void *a, void *p){
   byte i = atoi((char *)a );
-  alarms[i].enabled = true;
+  alarms[i].enabled = false;
   Serial.print("Disabled alarm ");
   Serial.println(i);
   storeAlarms();
